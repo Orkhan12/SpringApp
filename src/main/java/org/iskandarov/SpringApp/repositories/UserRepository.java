@@ -11,11 +11,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findByName(String name);
 
+    User findById(Long id);
+
     @Override
     <S extends User> S saveAndFlush(S s);
 
     @Override
     User getOne(Integer integer);
+
+    void deleteById(Long id);
 
     @Override
     <S extends User> List<S> findAll(Example<S> example);

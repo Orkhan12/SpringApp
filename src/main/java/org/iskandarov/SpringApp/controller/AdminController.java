@@ -5,17 +5,17 @@ import org.iskandarov.SpringApp.entities.User;
 import org.iskandarov.SpringApp.repositories.RoleRepository;
 import org.iskandarov.SpringApp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
 @Controller
+@Transactional
 public class AdminController {
 
     @Autowired
@@ -38,47 +38,43 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/add", method = RequestMethod.POST)
-    public String addUsers(@ModelAttribute("admin") User user, @RequestParam(value = "select_role", required = false) Integer role) {
+    public String addUsers(@ModelAttribute("admin") User user, @RequestParam(value = "select_role", required = false) String role) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Set<Role> set = new HashSet<>();
         if (role == null) {
-
-            set.add(this.roleRepository.getOne(2));
+            set.add(this.roleRepository.findByRole("ROLE_USER"));
         } else {
-            set.add(this.roleRepository.getOne(role));
+            set.add(this.roleRepository.findByRole(role));
         }
         user.setRoles(set);
-        if (user.getId() == null) {
-            this.userRepository.saveAndFlush(user);
-        } else {
-            this.userRepository.saveAndFlush(user);
-        }
+        this.userRepository.save(user);
         return "redirect:/admin";
     }
 
-//    @RequestMapping("remove/{id}")
-//    public String removeUser(@PathVariable("id") int id, @ModelAttribute("user") User user) {
-//        this.userService.removeUser(id);
-//
-//        return "redirect:/admin";
-//    }
-//
-//    @RequestMapping("edit/{id}")
-//    public String editUser(@PathVariable("id") int id, Model model) {
-//        model.addAttribute("user", this.userService.getUserById(id));
-//        model.addAttribute("listUsers", this.userService.listUser());
-//        model.addAttribute("listRole", this.userService.listRole());
-//
-//        return "admin";
-//
-//    }
-//
-//    @RequestMapping("userdata/{id}")
-//    public String userData(@PathVariable("id") int id, Model model) {
-//        model.addAttribute("user", this.userService.getUserById(id));
-//
-//        return "userdata";
-//
-//    }
+    @RequestMapping("remove/{id}")
+    public String removeUser(@PathVariable("id") Long id, @ModelAttribute("user") User user) {
+        this.userRepository.deleteById(id);
+        return "redirect:/admin";
+    }
+
+    @RequestMapping("edit/{id}")
+    public String editUser(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("user", this.userRepository.findById(id));
+        model.addAttribute("listUsers", this.userRepository.findAll());
+        model.addAttribute("listRole", this.roleRepository.findAll());
+
+        return "admin";
+
+    }
+
+    @RequestMapping("userdata/{id}")
+    public String userData(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("user", this.userRepository.findById(id));
+
+        return "userdata";
+
+    }
 
 }
 
