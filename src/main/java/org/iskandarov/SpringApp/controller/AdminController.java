@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -60,12 +62,18 @@ public class AdminController {
 
     @RequestMapping("edit/{id}")
     public String editUser(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", this.userRepository.findById(id));
-        model.addAttribute("listUsers", this.userRepository.findAll());
-        model.addAttribute("listRole", this.roleRepository.findAll());
+        model.addAttribute("editappel", this.userRepository.findById(id));
+//        model.addAttribute("listUsers", this.userRepository.findAll());
+//        model.addAttribute("listRole", this.roleRepository.findAll());
 
         return "admin";
 
+    }
+
+    @RequestMapping(value="/admin/update",method=RequestMethod.POST)
+    public String updateUser(@ModelAttribute("editappel") User user) {
+        this.userRepository.save(user);
+        return "redirect:/admin";
     }
 
     @RequestMapping("userdata/{id}")
