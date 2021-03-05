@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -62,7 +63,7 @@ public class AdminController {
 
     @RequestMapping("edit/{id}")
     public String editUser(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("editappel", this.userRepository.findById(id));
+        model.addAttribute("user", this.userRepository.findById(id));
 //        model.addAttribute("listUsers", this.userRepository.findAll());
 //        model.addAttribute("listRole", this.roleRepository.findAll());
 
@@ -70,8 +71,13 @@ public class AdminController {
 
     }
 
-    @RequestMapping(value="/admin/update",method=RequestMethod.POST)
-    public String updateUser(@ModelAttribute("editappel") User user) {
+    @RequestMapping(value="/admin/update/{id}",method=RequestMethod.POST)
+    public String updateUser(@PathVariable("id") long id, @Valid User user,
+                             BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            user.setId(id);
+            return "admin";
+        }
         this.userRepository.save(user);
         return "redirect:/admin";
     }

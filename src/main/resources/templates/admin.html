@@ -76,7 +76,7 @@
                                             </p>
                                         </td>
                                         <td>
-                                            <a data-toggle="modal" data-target="#exampleModal" class="btn btn-info"
+                                            <a class="btn btn-info" data-toggle="modal" data-target="#exampleModal"
                                                     th:href="@{'/edit/' + ${user.id}}">
                                                 Edit
                                             </a>
@@ -149,35 +149,23 @@
             </div>
             <div class="modal-body">
                 <div class="w-50 px-2 mx-auto">
-                    <form action="#" th:action="@{/admin/update}" th:object="${editappel}" method="POST">
-                        <div class="form-group">
-                            <label class="font-weight-bold" for="exampleFormControlInput1">First name</label>
-                            <input type="text" class="form-control" id="exampleFormControlInput4"
-                                   th:field="*{name}">
+                    <form action="#"
+                          th:action="@{'admin/update/' + ${user.id}}"
+                          th:object="${user}"
+                          method="post">
 
-                            <label class="font-weight-bold" for="exampleFormControlInput1">Last name</label>
-                            <input type="text" class="form-control" id="exampleFormControlInput5"
-                                   th:field="*{lastName}">
+                        <label for="name">Name</label>
+                        <input type="text" th:field="*{name}" id="name" placeholder="Name">
+                        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
 
-                            <label class="font-weight-bold" for="exampleFormControlInput1">Email address</label>
-                            <input type="email" class="form-control" id="exampleFormControlInput6"
-                                   th:field="*{email}">
+                        <label for="name">Last Name</label>
+                        <input type="text" th:field="*{lastName}" id="lastName" placeholder="Last name">
+                        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
 
-                            <label class="font-weight-bold" for="exampleFormControlInput1">Password</label>
-                            <input type="password" class="form-control"
-                                   id="exampleDropdownFormPassword2" th:field="*{password}">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="font-weight-bold" for="exampleFormControlSelect2">Role</label>
-                            <select multiple size="2" name="select_role" class="form-control"
-                                    id="exampleFormControlSelect3">
-                                <option
-                                        th:each="role : ${listRole}"
-                                        th:value="${role.getRole()}" th:text="${role.getAuthority()}">
-                                </option>
-                            </select>
-                        </div>
+                        <label for="email">Email</label>
+                        <input type="text" th:field="*{email}" id="email" placeholder="Email">
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                        <input type="submit" value="Update User">
                     </form>
                 </div>
             </div>
