@@ -64,8 +64,6 @@ public class AdminController {
     @RequestMapping("edit/{id}")
     public String editUser(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", this.userRepository.findById(id));
-//        model.addAttribute("listUsers", this.userRepository.findAll());
-//        model.addAttribute("listRole", this.roleRepository.findAll());
 
         return "admin";
 
