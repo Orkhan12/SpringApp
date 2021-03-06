@@ -71,13 +71,8 @@ public class AdminController {
 
     }
 
-    @RequestMapping(value="/admin/update/{id}",method=RequestMethod.POST)
-    public String updateUser(@PathVariable("id") long id, @Valid User user,
-                             BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            user.setId(id);
-            return "admin";
-        }
+    @RequestMapping(value="/admin/update",method=RequestMethod.POST)
+    public String updateUser(User user) {
         this.userRepository.save(user);
         return "redirect:/admin";
     }

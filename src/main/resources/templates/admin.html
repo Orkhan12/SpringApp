@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    <script type="text/javascript"
+            src="webjars/jquery/2.2.3/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="webjars/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/main.js}" src="../static/js/main.js"></script>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Title</title>
 </head>
@@ -76,8 +82,7 @@
                                             </p>
                                         </td>
                                         <td>
-                                            <a class="btn btn-info" data-toggle="modal" data-target="#exampleModal"
-                                                    th:href="@{'/edit/' + ${user.id}}">
+                                            <a class="btn btn-info eBtn">
                                                 Edit
                                             </a>
                                         </td>
@@ -95,37 +100,40 @@
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <div class="p-3 mb-2 bg-light text-dark border-bottom font-weight-bold">Add new user</div>
                             <div class="w-50 px-5 mx-auto">
-                            <form action="#" th:action="@{/admin/add}" th:object="${user}" method="POST">
-                                <div class="form-group">
-                                    <label class="font-weight-bold" for="exampleFormControlInput1">First name</label>
-                                    <input type="text" class="form-control" id="exampleFormControlInput1"
-                                           th:field="*{name}">
+                                <form action="#" th:action="@{/admin/add}" th:object="${user}" method="POST">
+                                    <div class="form-group">
+                                        <label class="font-weight-bold" for="exampleFormControlInput1">First
+                                            name</label>
+                                        <input type="text" class="form-control" id="exampleFormControlInput1"
+                                               th:field="*{name}">
 
-                                    <label class="font-weight-bold" for="exampleFormControlInput1">Last name</label>
-                                    <input type="text" class="form-control" id="exampleFormControlInput2"
-                                           th:field="*{lastName}">
+                                        <label class="font-weight-bold" for="exampleFormControlInput1">Last name</label>
+                                        <input type="text" class="form-control" id="exampleFormControlInput2"
+                                               th:field="*{lastName}">
 
-                                    <label class="font-weight-bold" for="exampleFormControlInput1">Email address</label>
-                                    <input type="email" class="form-control" id="exampleFormControlInput3"
-                                           th:field="*{email}">
+                                        <label class="font-weight-bold" for="exampleFormControlInput1">Email
+                                            address</label>
+                                        <input type="email" class="form-control" id="exampleFormControlInput3"
+                                               th:field="*{email}">
 
-                                    <label class="font-weight-bold" for="exampleFormControlInput1">Password</label>
-                                    <input type="password" class="form-control"
-                                           id="exampleDropdownFormPassword1" th:field="*{password}">
-                                </div>
+                                        <label class="font-weight-bold" for="exampleFormControlInput1">Password</label>
+                                        <input type="password" class="form-control"
+                                               id="exampleDropdownFormPassword1" th:field="*{password}">
+                                    </div>
 
-                                <div class="form-group">
-                                    <label class="font-weight-bold" for="exampleFormControlSelect2">Role</label>
-                                    <select multiple size="2" name="select_role" class="form-control"
-                                            id="exampleFormControlSelect2">
-                                        <option
-                                                th:each="role : ${listRole}"
-                                                th:value="${role.getRole()}" th:text="${role.getAuthority()}">
-                                        </option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-success btn-lg mb-3" value="Add">Add new user</button>
-                            </form>
+                                    <div class="form-group">
+                                        <label class="font-weight-bold" for="exampleFormControlSelect2">Role</label>
+                                        <select multiple size="2" name="select_role" class="form-control"
+                                                id="exampleFormControlSelect2">
+                                            <option
+                                                    th:each="role : ${listRole}"
+                                                    th:value="${role.getRole()}" th:text="${role.getAuthority()}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-success btn-lg mb-3" value="Add">Add new user
+                                    </button>
+                                </form>
                             </div>
                         </div>
 
@@ -138,43 +146,52 @@
     </div>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="w-50 px-2 mx-auto">
-                    <form action="#"
-                          th:action="@{'admin/update/' + ${user.id}}"
-                          th:object="${user}"
-                          method="post">
+<div class="myForm">
+    <form th:action="@{/admin/update}" method="post">
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="id" class="col-form-label">ID:</label>
+                            <input type="text" class="form-control" id="id" name="id" value=" "/>
+                        </div>
 
-                        <label for="name">Name</label>
-                        <input type="text" th:field="*{name}" id="name" placeholder="Name">
-                        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                        <div class="form-group">
+                            <label for="name" class="col-form-label">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name" value=" "/>
+                        </div>
 
-                        <label for="name">Last Name</label>
-                        <input type="text" th:field="*{lastName}" id="lastName" placeholder="Last name">
-                        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+                        <div class="form-group">
+                            <label for="lastName" class="col-form-label">Last name:</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" value=" "/>
+                        </div>
 
-                        <label for="email">Email</label>
-                        <input type="text" th:field="*{email}" id="email" placeholder="Email">
-                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-                        <input type="submit" value="Update User">
-                    </form>
+                        <div class="form-group">
+                            <label for="email" class="col-form-label">Email:</label>
+                            <input type="text" class="form-control" id="email" name="email" value=" "/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="col-form-label">Password:</label>
+                            <input type="text" class="form-control" id="password" name="password" value=" "/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-secondary" data-dismiss="modal">Close</input>
+                        <input type="submit" class="btn btn-primary" value="save"/>
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Edit</button>
-            </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
